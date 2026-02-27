@@ -1,3 +1,59 @@
 {
-  "hello-world": "Hello world!"
+  "generic": {
+    "save": "Save"
+  },
+  "avatar-settings-title": "Profile Avatar Settings",
+  "avatar-upload-requirements": "JPG, PNG or GIF. Max {maxSize}MB.",
+  "custom": "Custom",
+  "minotar": "Minotar (Minecraft)",
+  "gravatar": "Gravatar",
+  "minotar-info": "Using Minecraft skin of {username}",
+  "gravatar-info": "Using Gravatar for {email}",
+  "buttons": {
+    "upload": "Upload Image",
+    "cancel": "Cancel",
+    "remove": "Remove"
+  },
+  "toasts": {
+    "save-success": "Avatar saved successfully.",
+    "save-error": "Failed to save avatar.",
+    "file-too-large": "File is too large. Maximum size is {maxSize}MB.",
+    "invalid-type": "Invalid file type. Allowed: {types}."
+  },
+  "permissions": {
+    "MANAGE_AVATAR_SETTINGS": {
+      "title": "Manage Avatar Settings",
+      "description": "Can configure avatar plugin settings such as allowed sources, file types, and size limits."
+    },
+    "MANAGE_PLAYER_AVATAR": {
+      "title": "Manage Player Avatars",
+      "description": "Can change player profile avatars from the player detail page."
+    }
+  },
+  "activity-logs": {
+    "UPDATED_AVATAR_SETTINGS": "<b>{username}</b> updated the avatar plugin settings.",
+    "UPDATED_PLAYER_AVATAR": "<b>{username}</b> updated the avatar of player <b>{targetUsername}</b>."
+  },
+  "settings": {
+    "title": "Avatar Settings",
+    "max-size": "Max Upload Size",
+    "max-size-desc": "Maximum file size for custom avatar uploads",
+    "allowed-types": "Allowed Image Types",
+    "allowed-types-desc": "Which image formats users can upload",
+    "allowed-sources": "Allowed Avatar Sources",
+    "allowed-sources-desc": "Which avatar sources are available to users",
+    "custom-upload": "Custom Upload",
+    "custom-sources": "Custom URL Sources",
+    "custom-sources-desc": "Add custom avatar sources using URL templates",
+    "custom-source-title": "Source Title",
+    "custom-source-url": "URL Template",
+    "custom-source-url-hint": "Use {identifier} as placeholder, e.g. https://example.com/avatar/{identifier}",
+    "identifier-username": "Username",
+    "identifier-email": "Email",
+    "add-custom-source": "Add Custom Source"
+  },
+  "panel-edit": {
+    "avatar-title": "Profile Avatar",
+    "avatar-desc": "JPG, PNG or GIF. Max {maxSize}MB."
+  }
 }

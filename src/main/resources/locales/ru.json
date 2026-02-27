@@ -1,0 +1,59 @@
+{
+    "generic": {
+        "save": "Сохранить"
+    },
+    "avatar-settings-title": "Настройки аватара профиля",
+    "avatar-upload-requirements": "JPG, PNG или GIF. Макс. {maxSize}МБ.",
+    "custom": "Пользовательский",
+    "minotar": "Minotar (Minecraft)",
+    "gravatar": "Gravatar",
+    "minotar-info": "Используется скин Minecraft игрока {username}",
+    "gravatar-info": "Используется Gravatar для {email}",
+    "buttons": {
+        "upload": "Загрузить",
+        "cancel": "Отмена",
+        "remove": "Удалить"
+    },
+    "toasts": {
+        "save-success": "Аватар успешно сохранён.",
+        "save-error": "Не удалось сохранить аватар.",
+        "file-too-large": "Файл слишком большой. Максимальный размер — {maxSize}МБ.",
+        "invalid-type": "Недопустимый тип файла. Разрешённые: {types}."
+    },
+    "permissions": {
+        "MANAGE_AVATAR_SETTINGS": {
+            "title": "Управление настройками аватара",
+            "description": "Возможность настраивать параметры плагина аватара: разрешённые источники, типы файлов и ограничения размера."
+        },
+        "MANAGE_PLAYER_AVATAR": {
+            "title": "Управление аватарами игроков",
+            "description": "Возможность изменять аватары игроков на странице деталей игрока."
+        }
+    },
+    "activity-logs": {
+        "UPDATED_AVATAR_SETTINGS": "<b>{username}</b> обновил(а) настройки плагина аватара.",
+        "UPDATED_PLAYER_AVATAR": "<b>{username}</b> обновил(а) аватар игрока <b>{targetUsername}</b>."
+    },
+    "settings": {
+        "title": "Настройки аватара",
+        "max-size": "Максимальный размер загрузки",
+        "max-size-desc": "Максимальный размер файла для пользовательских аватаров",
+        "allowed-types": "Разрешённые типы изображений",
+        "allowed-types-desc": "Какие форматы изображений могут загружать пользователи",
+        "allowed-sources": "Разрешённые источники аватаров",
+        "allowed-sources-desc": "Какие источники аватаров доступны пользователям",
+        "custom-upload": "Пользовательская загрузка",
+        "custom-sources": "Пользовательские URL-источники",
+        "custom-sources-desc": "Добавьте пользовательские источники аватаров с помощью шаблонов URL",
+        "custom-source-title": "Название источника",
+        "custom-source-url": "Шаблон URL",
+        "custom-source-url-hint": "Используйте {identifier} как заполнитель, например https://example.com/avatar/{identifier}",
+        "identifier-username": "Имя пользователя",
+        "identifier-email": "Электронная почта",
+        "add-custom-source": "Добавить источник"
+    },
+    "panel-edit": {
+        "avatar-title": "Аватар профиля",
+        "avatar-desc": "JPG, PNG или GIF. Макс. {maxSize}МБ."
+    }
+}

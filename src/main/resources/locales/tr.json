@@ -1,3 +1,59 @@
 {
-  "hello-world": "Merhaba dünya!"
+  "generic": {
+    "save": "Kaydet"
+  },
+  "avatar-settings-title": "Profil Avatar Ayarları",
+  "avatar-upload-requirements": "JPG, PNG veya GIF. Maks {maxSize}MB.",
+  "custom": "Özel",
+  "minotar": "Minotar (Minecraft)",
+  "gravatar": "Gravatar",
+  "minotar-info": "{username} kullanıcısının Minecraft skinini kullanır",
+  "gravatar-info": "{email} e-postasına bağlı Gravatarı kullanır",
+  "buttons": {
+    "upload": "Resim Yükle",
+    "cancel": "İptal",
+    "remove": "Kaldır"
+  },
+  "toasts": {
+    "save-success": "Avatar başarıyla kaydedildi.",
+    "save-error": "Avatar kaydedilemedi.",
+    "file-too-large": "Dosya çok büyük. Maksimum boyut {maxSize}MB.",
+    "invalid-type": "Geçersiz dosya türü. İzin verilen: {types}."
+  },
+  "permissions": {
+    "MANAGE_AVATAR_SETTINGS": {
+      "title": "Avatar Ayarlarını Yönet",
+      "description": "Avatar eklentisi ayarlarını düzenleyebilir (izin verilen kaynaklar, dosya türleri, boyut sınırları)."
+    },
+    "MANAGE_PLAYER_AVATAR": {
+      "title": "Oyuncu Avatarlarını Yönet",
+      "description": "Oyuncu detay sayfasından oyuncu profil fotoğraflarını değiştirebilir."
+    }
+  },
+  "activity-logs": {
+    "UPDATED_AVATAR_SETTINGS": "<b>{username}</b> avatar eklentisi ayarlarını güncelledi.",
+    "UPDATED_PLAYER_AVATAR": "<b>{username}</b>, <b>{targetUsername}</b> oyuncusunun avatarını güncelledi."
+  },
+  "settings": {
+    "title": "Avatar Ayarları",
+    "max-size": "Maksimum Yükleme Boyutu",
+    "max-size-desc": "Özel avatar yüklemeleri için maksimum dosya boyutu",
+    "allowed-types": "İzin Verilen Resim Türleri",
+    "allowed-types-desc": "Kullanıcıların yükleyebileceği resim formatları",
+    "allowed-sources": "İzin Verilen Avatar Kaynakları",
+    "allowed-sources-desc": "Kullanıcılara sunulan avatar kaynakları",
+    "custom-upload": "Özel Yükleme",
+    "custom-sources": "Özel URL Kaynakları",
+    "custom-sources-desc": "URL şablonları kullanarak özel avatar kaynakları ekleyin",
+    "custom-source-title": "Kaynak Başlığı",
+    "custom-source-url": "URL Şablonu",
+    "custom-source-url-hint": "{identifier} yer tutucusunu kullanın, örn. https://example.com/avatar/{identifier}",
+    "identifier-username": "Kullanıcı Adı",
+    "identifier-email": "E-posta",
+    "add-custom-source": "Özel Kaynak Ekle"
+  },
+  "panel-edit": {
+    "avatar-title": "Profil Avatarı",
+    "avatar-desc": "JPG, PNG veya GIF. Maks {maxSize}MB."
+  }
 }
