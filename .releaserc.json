@@ -10,25 +10,6 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
-      "@PanoMC/semantic-release-pano",
-      {
-        "file": "build/libs/pano-plugin-avatar-${version}.jar",
-        "panoVersion": "1.0.0",
-        "configs": [
-          {
-            "resourceId": "pano-plugin-avatar",
-            "panoUrl": "https://api-dev.panomc.com",
-            "tokenVar": "PANO_TOKEN"
-          },
-          {
-            "resourceId": "pano-plugin-avatar",
-            "panoUrl": "https://api.panomc.com",
-            "tokenVar": "PANO_PROD_TOKEN"
-          }
-        ]
-      }
-    ],
-    [
       "@semantic-release/github",
       {
         "assets": [
@@ -39,6 +20,27 @@
           {
             "path": "LICENSE",
             "label": false
+          }
+        ]
+      }
+    ],
+    [
+      "@PanoMC/semantic-release-pano",
+      {
+        "file": "build/libs/pano-plugin-avatar-${version}.jar",
+        "panoVersion": "1.0.0",
+        "useGitHubLink": true,
+        "repositoryUrl": "https://github.com/PanoMC/pano-plugin-avatar.git",
+        "configs": [
+          {
+            "resourceId": "pano-plugin-avatar",
+            "panoUrl": "https://api-dev.panomc.com",
+            "tokenVar": "PANO_TOKEN"
+          },
+          {
+            "resourceId": "pano-plugin-avatar",
+            "panoUrl": "https://api.panomc.com",
+            "tokenVar": "PANO_PROD_TOKEN"
           }
         ]
       }
