@@ -81,8 +81,8 @@
 
   const defaultPreview = "https://api.dicebear.com/7.x/avataaars/svg?seed=Pano";
 
-  let targetUsername = playerData?.username || '';
-  let targetEmail = playerData?.email || '';
+  let targetUsername = '';
+  let targetEmail = '';
 
   // Config from API
   let config = null;
@@ -116,10 +116,26 @@
     avatarType !== initialType ||
     (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile));
 
-  // Load config and avatar data when mounted
-  loadData();
+  /** Edit modal reuses the same card row instance for every player; reload when username or email changes. */
+  let lastLoadKey = null;
+
+  $: if (playerData?.username) {
+    const k = `${playerData.username}\u0000${playerData?.email || ''}`;
+    if (k !== lastLoadKey) {
+      lastLoadKey = k;
+      targetUsername = playerData.username;
+      targetEmail = playerData?.email || '';
+      selectedFile = null;
+      selectedFilePreview = null;
+      removeFile = false;
+      loadData();
+    }
+  }
 
   async function loadData() {
+    if (!targetUsername) {
+      return;
+    }
     try {
       const [configRes, avatarRes] = await Promise.all([
         ApiUtil.get({ path: '/api/panel/avatar/config' }),
