@@ -168,6 +168,8 @@ class UpdateAvatarAPI(
         val fileName = "${System.currentTimeMillis()}-${fileUpload.uploadedFileName().split(File.separator).last()}.$extension"
         val destFile = File(plugin.uploadsDir, fileName)
 
+        plugin.uploadsDir.mkdirs()
+
         destFile.writeBytes(optimizedBytes)
 
         return fileName
