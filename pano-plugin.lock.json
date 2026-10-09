@@ -1,0 +1,27 @@
+{
+  "controllers": {},
+  "format": 1,
+  "views": {
+    "avatar:AvatarUpload": {
+      "classes": [
+        "avatar-avatar-upload",
+        "avatar-avatar-upload__action",
+        "avatar-avatar-upload__cancel",
+        "avatar-avatar-upload__image",
+        "avatar-avatar-upload__remove",
+        "avatar-avatar-upload__select"
+      ],
+      "contract": 1,
+      "hooks": [],
+      "props": {
+        "data": {
+          "required": true
+        },
+        "onRegister": {
+          "required": true
+        }
+      },
+      "slots": []
+    }
+  }
+}

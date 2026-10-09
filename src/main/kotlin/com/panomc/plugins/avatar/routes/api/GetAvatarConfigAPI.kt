@@ -9,14 +9,34 @@ import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
 
 @Endpoint
 class GetAvatarConfigAPI(
     private val plugin: AvatarPlugin
 ) : Api() {
-    override val paths = listOf(Path("/api/avatar/config", RouteType.GET))
+    override val paths = listOf(Path("/avatar/config", RouteType.GET))
+
+    override val doc = EndpointDoc(
+        summary = "What avatars players may choose: size limit, file types and sources.",
+        tag = "avatar",
+        response = objectSchema()
+            .requiredProperty("maxSizeMb", intSchema())
+            .requiredProperty("allowedTypes", arraySchema().items(stringSchema()))
+            .requiredProperty("allowedSources", arraySchema().items(stringSchema()))
+            .requiredProperty(
+                "customSources",
+                arraySchema().items(
+                    objectSchema()
+                        .requiredProperty("title", stringSchema())
+                        .requiredProperty("urlTemplate", stringSchema())
+                        .requiredProperty("identifierField", stringSchema())
+                )
+            )
+    )
 
     private val configManager by lazy {
         plugin.pluginBeanContext.getBean(PluginConfigManager::class.java) as PluginConfigManager<AvatarConfig>

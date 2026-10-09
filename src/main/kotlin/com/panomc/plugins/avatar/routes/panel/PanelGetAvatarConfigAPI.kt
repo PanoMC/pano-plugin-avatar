@@ -10,14 +10,14 @@ import com.panomc.plugins.avatar.permission.ManageAvatarSettingsPermission
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 
 @Endpoint
 class PanelGetAvatarConfigAPI(
     private val plugin: AvatarPlugin
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/avatar/config", RouteType.GET))
+    override val paths = listOf(Path("/avatar/config", RouteType.GET))
 
     private val authProvider by lazy {
         plugin.applicationContext.getBean(AuthProvider::class.java)

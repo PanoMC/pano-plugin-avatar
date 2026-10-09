@@ -74,7 +74,7 @@
 
 <script>
   import { _, updateAvatarVersion } from '../../../main.js';
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export let playerData;
   export let onHookRegister;
@@ -109,7 +109,7 @@
     avatarType === 'MINOTAR' ? minotarSrc :
     avatarType === 'GRAVATAR' ? `https://www.gravatar.com/avatar/000?s=80&d=identicon` :
     selectedFilePreview ? selectedFilePreview :
-    currentFileName ? `/api/avatar/image/${currentFileName}` :
+    currentFileName ? `/api/plugins/pano-plugin-avatar/avatar/image/${currentFileName}` :
     defaultPreview;
 
   $: isDirty =
@@ -138,8 +138,8 @@
     }
     try {
       const [configRes, avatarRes] = await Promise.all([
-        ApiUtil.get({ path: '/api/panel/avatar/config' }),
-        ApiUtil.get({ path: `/api/panel/avatar/player/${targetUsername}` }),
+        api.panel.get({ path: '/avatar/config' }),
+        api.panel.get({ path: `/avatar/player/${targetUsername}` }),
       ]);
 
       if (configRes && !configRes.error) {
@@ -181,8 +181,8 @@
         formData.append('avatar', selectedFile);
       }
 
-      const result = await ApiUtil.post({
-        path: `/api/panel/avatar/player/${targetUsername}`,
+      const result = await api.panel.post({
+        path: `/avatar/player/${targetUsername}`,
         body: formData,
       });
 
@@ -200,8 +200,8 @@
       if (avatarType === 'CUSTOM') {
         if (selectedFile) {
           // Reload avatar data to get the new filename
-          const avatarRes = await ApiUtil.get({
-            path: `/api/panel/avatar/player/${targetUsername}`,
+          const avatarRes = await api.panel.get({
+            path: `/avatar/player/${targetUsername}`,
           });
           if (avatarRes && !avatarRes.error) {
             currentFileName = avatarRes.fileName;

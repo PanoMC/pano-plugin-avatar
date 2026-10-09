@@ -15,19 +15,28 @@ import io.vertx.core.Handler
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Bodies
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Bodies
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.objectSchema
 import io.vertx.json.schema.common.dsl.Schemas.stringSchema
 import java.io.File
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
+import com.panomc.platform.error.NotLoggedIn
 
 @Endpoint
 class UpdateAvatarAPI(
     private val plugin: AvatarPlugin,
     private val userAvatarDao: UserAvatarDao
 ) : LoggedInApi() {
-    override val paths = listOf(Path("/api/avatar", RouteType.POST))
+    override val paths = listOf(Path("/avatar", RouteType.POST))
+
+    override val doc = EndpointDoc(
+        summary = "Sets the signed-in player's avatar source; a multipart upload carries the file for the custom source.",
+        tag = "avatar",
+        errors = listOf(BadRequest::class, NotLoggedIn::class)
+    )
 
     companion object {
         private const val AVATAR_MAX_DIMENSION = 256

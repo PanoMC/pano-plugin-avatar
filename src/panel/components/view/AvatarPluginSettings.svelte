@@ -176,7 +176,7 @@
 
 <script>
   import { _, showSuccessToast, showErrorToast } from '../../../main.js';
-  import ApiUtil from '@panomc/sdk/utils/api';
+  import { api } from '@panomc/sdk/plugin-api';
 
   export let addon;
 
@@ -229,8 +229,8 @@
     if (saving) return;
     saving = true;
     try {
-      await ApiUtil.put({
-        path: '/api/panel/avatar/config',
+      await api.panel.put({
+        path: '/avatar/config',
         body: config,
       });
       addon.config = config;

@@ -1,8 +1,9 @@
 import { PanoPlugin, viewComponent } from '@panomc/sdk';
 import { derived } from 'svelte/store';
+import { api } from '@panomc/sdk/plugin-api';
 import { _ as i18n } from '@panomc/sdk/utils/language';
-import ApiUtil from '@panomc/sdk/utils/api';
 import { showToast } from '@panomc/sdk/toasts';
+import { setPano } from './theme/avatar.js';
 
 const pluginId = 'pano-plugin-avatar';
 
@@ -27,19 +28,13 @@ export function showErrorToast(text, params = {}) {
   return showToast(text, params, undefined, { variant: 'danger' });
 }
 
-// Module-level pano reference for use by components
-let panoRef = null;
-
-export function updateAvatarVersion() {
-  if (panoRef && panoRef.ui && panoRef.ui.avatar) {
-    panoRef.ui.avatar.updateVersion();
-  }
-}
+// The pano object is kept in src/theme/avatar.js so the theme view can ask the host to refresh the avatar.
+export { updateAvatarVersion } from './theme/avatar.js';
 
 export default class PanoAvatarPlugin extends PanoPlugin {
   onLoad() {
     const pano = this.pano;
-    panoRef = pano;
+    setPano(pano);
 
     if (pano.isPanel) {
       // Load config when addon detail page opens
@@ -47,8 +42,8 @@ export default class PanoAvatarPlugin extends PanoPlugin {
         if (data.addon.id !== pluginId) return;
 
         try {
-          const config = await ApiUtil.get({
-            path: '/api/panel/avatar/config',
+          const config = await api.panel.get({
+            path: '/avatar/config',
             request: event,
           });
           data.addon.config = config;
@@ -78,14 +73,7 @@ export default class PanoAvatarPlugin extends PanoPlugin {
         });
       });
     } else {
-      // Register avatar upload component at the top of settings
-      pano.ui.settings.cardRows.edit((items) => {
-        items.push({
-          id: `${pluginId}-upload`,
-          component: viewComponent(() => import('./theme/components/view/AvatarUpload.svelte')),
-          priority: 110, // Higher than default rows (100, 90, 80)
-        });
-      });
+      // The upload card sits at the top of the settings rows through `export const view` in AvatarUpload.svelte.
     }
   }
 

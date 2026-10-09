@@ -1,0 +1,66 @@
+[
+  {
+    "method": "POST",
+    "old": "/api/avatar",
+    "new": "/api/plugins/pano-plugin-avatar/avatar",
+    "relative": "/plugins/pano-plugin-avatar/avatar",
+    "class": "UpdateAvatarAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/api/UpdateAvatarAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/avatar/config",
+    "new": "/api/plugins/pano-plugin-avatar/avatar/config",
+    "relative": "/plugins/pano-plugin-avatar/avatar/config",
+    "class": "GetAvatarConfigAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/api/GetAvatarConfigAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/avatar/image/:fileName",
+    "new": "/api/plugins/pano-plugin-avatar/avatar/image/:fileName",
+    "relative": "/plugins/pano-plugin-avatar/avatar/image/:fileName",
+    "class": "GetAvatarImageAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/api/GetAvatarImageAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/avatar/user/:username",
+    "new": "/api/plugins/pano-plugin-avatar/avatar/user/:username",
+    "relative": "/plugins/pano-plugin-avatar/avatar/user/:username",
+    "class": "GetAvatarAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/api/GetAvatarAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/avatar/config",
+    "new": "/api/plugins/pano-plugin-avatar/panel/avatar/config",
+    "relative": "/plugins/pano-plugin-avatar/panel/avatar/config",
+    "class": "PanelGetAvatarConfigAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/panel/PanelGetAvatarConfigAPI.kt"
+  },
+  {
+    "method": "PUT",
+    "old": "/api/panel/avatar/config",
+    "new": "/api/plugins/pano-plugin-avatar/panel/avatar/config",
+    "relative": "/plugins/pano-plugin-avatar/panel/avatar/config",
+    "class": "PanelUpdateAvatarConfigAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/panel/PanelUpdateAvatarConfigAPI.kt"
+  },
+  {
+    "method": "GET",
+    "old": "/api/panel/avatar/player/:username",
+    "new": "/api/plugins/pano-plugin-avatar/panel/avatar/player/:username",
+    "relative": "/plugins/pano-plugin-avatar/panel/avatar/player/:username",
+    "class": "PanelGetPlayerAvatarAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/panel/PanelGetPlayerAvatarAPI.kt"
+  },
+  {
+    "method": "POST",
+    "old": "/api/panel/avatar/player/:username",
+    "new": "/api/plugins/pano-plugin-avatar/panel/avatar/player/:username",
+    "relative": "/plugins/pano-plugin-avatar/panel/avatar/player/:username",
+    "class": "PanelUpdatePlayerAvatarAPI",
+    "file": "src/main/kotlin/com/panomc/plugins/avatar/routes/panel/PanelUpdatePlayerAvatarAPI.kt"
+  }
+]

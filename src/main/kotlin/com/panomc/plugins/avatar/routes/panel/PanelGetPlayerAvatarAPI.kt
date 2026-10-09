@@ -9,8 +9,8 @@ import com.panomc.plugins.avatar.db.dao.UserAvatarDao
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.stringSchema
 
@@ -19,7 +19,7 @@ class PanelGetPlayerAvatarAPI(
     private val plugin: AvatarPlugin,
     private val userAvatarDao: UserAvatarDao,
 ) : PanelApi() {
-    override val paths = listOf(Path("/api/panel/avatar/player/:username", RouteType.GET))
+    override val paths = listOf(Path("/avatar/player/:username", RouteType.GET))
 
     private val databaseManager by lazy {
         plugin.applicationContext.getBean(DatabaseManager::class.java)

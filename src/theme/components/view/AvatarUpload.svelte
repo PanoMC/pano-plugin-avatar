@@ -1,10 +1,10 @@
-<div class="row pt-2 pb-3 mb-3 border-bottom animate__animated animate__fadeIn">
+<div class="avatar-avatar-upload row pt-2 pb-3 mb-3 border-bottom">
   <label class="col-md-4 col-form-label pb-2">
     <div class="d-flex align-items-center gap-2 mb-2">
       <i class="fas fa-user-circle text-secondary"></i>
       <span class="fw-bold">{$_('avatar-settings-title')}</span>
     </div>
-    <select class="form-select form-select-sm" bind:value={avatarType}>
+    <select class="avatar-avatar-upload__select form-select form-select-sm" bind:value={avatarType}>
       {#each allowedSources as source}
         <option value={source}>
           {source === 'MINOTAR' ? $_('minotar') : source === 'GRAVATAR' ? $_('gravatar') : $_('custom')}
@@ -20,7 +20,7 @@
         <img
           src={previewSrc}
           alt="Avatar Preview"
-          class="rounded-circle border border-2 p-1 bg-white object-fit-cover shadow-sm"
+          class="avatar-avatar-upload__image rounded-circle border border-2 p-1 bg-white object-fit-cover shadow-sm"
           style="width: 80px; height: 80px;" />
         
         {#if uploading}
@@ -34,7 +34,7 @@
         {#if avatarType === 'CUSTOM'}
           <div class="vstack gap-2">
             <div class="d-flex gap-2">
-              <label for="avatar-input" class="btn btn-sm btn-outline-primary px-3">
+              <label for="avatar-input" class="avatar-avatar-upload__action btn btn-sm btn-outline-primary px-3">
                 <i class="fas fa-upload me-1"></i> {$_('buttons.upload')}
               </label>
               <input
@@ -45,13 +45,13 @@
                 onchange={handleFileChange} />
 
               {#if isDirty}
-                <button class="btn btn-sm btn-link text-decoration-none px-0" onclick={resetAvatar}>
+                <button class="avatar-avatar-upload__cancel btn btn-sm btn-link text-decoration-none px-0" onclick={resetAvatar}>
                    {$_('buttons.cancel')}
                 </button>
               {/if}
             </div>
             {#if selectedFile || (currentFileName && !removeFile)}
-              <button class="btn btn-sm btn-link text-danger text-decoration-none p-0 text-start" onclick={removeAvatar}>
+              <button class="avatar-avatar-upload__remove btn btn-sm btn-link text-danger text-decoration-none p-0 text-start" onclick={removeAvatar}>
                  <i class="fas fa-trash-alt me-1"></i> {$_('buttons.remove')}
               </button>
             {/if}
@@ -72,16 +72,41 @@
   </div>
 </div>
 
+<style>
+  /* Kept rule: the fade-in the card had through animate.css (animate__animated animate__fadeIn), now its own animation. */
+  .avatar-avatar-upload {
+    animation: avatar-fade-in var(--animate-duration, 1s) both;
+  }
+
+  @keyframes avatar-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .avatar-avatar-upload {
+      animation-duration: 1ms;
+      animation-iteration-count: 1;
+    }
+  }
+</style>
+
 <script module>
-  import ApiUtil from "@panomc/sdk/utils/api";
+  // The upload card sits above the default settings rows (100, 90, 80).
+  export const view = { slot: 'settings-card-rows', id: 'pano-plugin-avatar-upload', priority: 110 };
+  import { api } from "@panomc/sdk/plugin-api";
 
   export async function load(event) {
     try {
       const {session: {user}} = await event.parent()
       const [configRes, avatarRes] = await Promise.all([
-        ApiUtil.get({ path: '/api/avatar/config', request: event }),
+        api.get({ path: '/avatar/config', request: event }),
         user
-          ? ApiUtil.get({ path: `/api/avatar/user/${user.username}`, request: event })
+          ? api.get({ path: `/avatar/user/${user.username}`, request: event })
           : Promise.resolve(null),
       ]);
 
@@ -101,8 +126,13 @@
 
 <script>
   import { untrack } from 'svelte';
-  import { _, updateAvatarVersion } from "../../../main.js";
+  import { derived } from 'svelte/store';
+  import { _ as i18n } from '@panomc/sdk/utils/language';
+  import { updateAvatarVersion } from "../../avatar.js";
   import { page } from "@panomc/sdk/svelte";
+
+  // plugin translations: `$_('key')` reads `plugins.pano-plugin-avatar.key`
+  const _ = derived(i18n, ($_fn) => (key, options) => $_fn(`plugins.pano-plugin-avatar.${key}`, options));
 
   let { onRegister, data } = $props();
 
@@ -160,7 +190,7 @@
     avatarType === 'MINOTAR' ? minotarSrc :
     avatarType === 'GRAVATAR' ? gravatarSrc :
     selectedFilePreview ? selectedFilePreview :
-    currentFileName ? `/api/avatar/image/${currentFileName}` :
+    currentFileName ? `/api/plugins/pano-plugin-avatar/avatar/image/${currentFileName}` :
     defaultPreview
   );
 
@@ -191,8 +221,8 @@
         formData.append('avatar', selectedFile);
       }
 
-      const result = await ApiUtil.post({
-        path: '/api/avatar',
+      const result = await api.post({
+        path: '/avatar',
         body: formData,
       });
 
@@ -210,8 +240,8 @@
       if (avatarType === 'CUSTOM') {
         if (selectedFile) {
           // Reload avatar data to get the new filename
-          const avatarRes = await ApiUtil.get({
-            path: `/api/avatar/user/${session.user.username}`,
+          const avatarRes = await api.get({
+            path: `/avatar/user/${session.user.username}`,
           });
           if (avatarRes && !avatarRes.error) {
             currentFileName = avatarRes.fileName;

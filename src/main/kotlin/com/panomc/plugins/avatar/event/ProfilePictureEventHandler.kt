@@ -4,6 +4,7 @@ import com.panomc.platform.api.annotation.EventListener
 import com.panomc.platform.api.config.PluginConfigManager
 import com.panomc.platform.api.event.ProfilePictureEventListener
 import com.panomc.platform.db.model.User
+import com.panomc.platform.route.ApiPaths
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.config.AvatarConfig
 import com.panomc.plugins.avatar.config.AvatarType
@@ -46,7 +47,7 @@ class ProfilePictureEventHandler(
             }
             AvatarType.CUSTOM -> {
                 if (userAvatar.fileName != null) {
-                    "/api/avatar/image/${userAvatar.fileName}"
+                    ApiPaths.plugin(plugin.pluginId, "/avatar/image/${userAvatar.fileName}")
                 } else {
                     null // No custom file uploaded, fall back
                 }

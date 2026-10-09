@@ -9,18 +9,29 @@ import com.panomc.plugins.avatar.db.dao.UserAvatarDao
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.validation.ValidationHandler
-import io.vertx.ext.web.validation.builder.Parameters
-import io.vertx.ext.web.validation.builder.ValidationHandlerBuilder
+import com.panomc.platform.schema.dsl.Parameters
+import com.panomc.platform.schema.dsl.ValidationHandlerBuilder
 import io.vertx.json.schema.SchemaRepository
 import io.vertx.json.schema.common.dsl.Schemas.stringSchema
 import org.springframework.beans.factory.getBean
+import com.panomc.platform.schema.EndpointDoc
+import io.vertx.json.schema.common.dsl.Schemas.*
 
 @Endpoint
 class GetAvatarAPI(
     private val plugin: AvatarPlugin,
     private val userAvatarDao: UserAvatarDao,
 ) : Api() {
-    override val paths = listOf(Path("/api/avatar/user/:username", RouteType.GET))
+    override val paths = listOf(Path("/avatar/user/:username", RouteType.GET))
+
+    override val doc = EndpointDoc(
+        summary = "Which avatar source a player uses, and the file name of an uploaded avatar.",
+        tag = "avatar",
+        response = objectSchema()
+            .requiredProperty("avatarType", stringSchema())
+            .requiredProperty("fileName", stringSchema().nullable()),
+        errors = listOf(NotFound::class)
+    )
 
     override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
         ValidationHandlerBuilder.create(schemaRepository)
