@@ -86,7 +86,8 @@ dependencies {
     if (bootstrap) {
         compileOnly(project(mapOf("path" to ":Pano")))
     } else {
-        compileOnly("com.github.panomc:pano:v1.0.0-beta.2")
+        // Pano v1.0.0-alpha.547 by its commit: JitPack's build of the tag itself failed on a JDK download and stays cached.
+        compileOnly("com.github.panomc:pano:7417f3a3f0")
     }
 
     compileOnly(kotlin("stdlib-jdk8"))
