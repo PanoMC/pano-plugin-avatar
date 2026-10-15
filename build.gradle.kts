@@ -1,11 +1,11 @@
-import java.net.URL
+import java.net.URI
 import java.util.Properties
 import java.util.zip.ZipFile
 
 plugins {
     kotlin("jvm") version "2.4.21"
     kotlin("kapt") version "2.4.21"
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.6.1"
     `maven-publish`
 }
 
@@ -13,14 +13,13 @@ group = "com.panomc.plugins"
 version =
     (if (project.hasProperty("version") && project.findProperty("version") != "unspecified") project.findProperty("version") else "local-build")!!
 
-val pf4jVersion: String by project
-val vertxVersion: String by project
-val gsonVersion: String by project
-val handlebarsVersion: String by project
-val springContextVersion: String by project
+val pf4jVersion = property("pf4jVersion") as String
+val vertxVersion = property("vertxVersion") as String
+val gsonVersion = property("gsonVersion") as String
+val springContextVersion = property("springContextVersion") as String
 val bootstrap = (project.findProperty("bootstrap") as String?)?.toBoolean() ?: false
 val noui = project.hasProperty("noui")
-val pluginsDir: File? by rootProject.extra
+val pluginsDir = rootProject.extra.properties["pluginsDir"] as File?
 
 val os = System.getProperty("os.name").lowercase()
 val arch = System.getProperty("os.arch").lowercase()
@@ -48,7 +47,7 @@ val bunDir = File(layout.buildDirectory.asFile.get().absolutePath, "bun")
 val bunBinDir = File(bunDir, bunPlatform)
 var bunBin = if (isWindows) File(bunBinDir, "bun.exe") else File(bunBinDir, "bun")
 
-val pluginId: String by project
+val pluginId = property("pluginId") as String
 
 // api-level (pano-api migrate-v1): "panoApiLevel" of the pano-web-platform tree this plugin is built in, else "current" from
 // the pano-api-level.properties inside the Pano jar on compileClasspath. `apiLevel=` in gradle.properties lowers it.
@@ -65,17 +64,17 @@ val panoApiLevel: String? by lazy {
         }
 }
 
-val pluginName: String by project
-val pluginDescription: String? by project
-val pluginPanoVersion: String by project
-val pluginClass: String by project
-val pluginDeveloper: String by project
-val pluginLicense: String? by project
-val pluginSourceUrl: String? by project
-val pluginDependencies: String? by project
-val pluginRequires: String? by project
+val pluginName = property("pluginName") as String
+val pluginDescription = findProperty("pluginDescription") as String?
+val pluginPanoVersion = property("pluginPanoVersion") as String
+val pluginClass = property("pluginClass") as String
+val pluginDeveloper = property("pluginDeveloper") as String
+val pluginLicense = findProperty("pluginLicense") as String?
+val pluginSourceUrl = findProperty("pluginSourceUrl") as String?
+val pluginDependencies = findProperty("pluginDependencies") as String?
+val pluginRequires = findProperty("pluginRequires") as String?
 
-val organization: String? by project
+val organization = findProperty("organization") as String?
 
 repositories {
     mavenCentral()
@@ -84,7 +83,7 @@ repositories {
 
 dependencies {
     if (bootstrap) {
-        compileOnly(project(mapOf("path" to ":Pano")))
+        compileOnly(project(":Pano"))
     } else {
         // Pano v1.0.0-alpha.547 by its commit: JitPack's build of the tag itself failed on a JDK download and stays cached.
         compileOnly("com.github.panomc:pano:7417f3a3f0")
@@ -118,7 +117,7 @@ tasks {
                 val zipFile = File(bunDir, "$bunPlatform.zip")
                 zipFile.parentFile.mkdirs()
 
-                URL(bunUrl).openStream().use { input ->
+                URI(bunUrl).toURL().openStream().use { input ->
                     zipFile.outputStream().use { output ->
                         input.copyTo(output)
                     }
@@ -237,10 +236,8 @@ publishing {
 
     publications {
         create<MavenPublication>("shadow") {
-            project.extensions.configure<com.github.jengelman.gradle.plugins.shadow.ShadowExtension> {
-                artifactId = pluginId
-                component(this@create)
-            }
+            artifactId = pluginId
+            from(components["shadow"])
         }
     }
 }
