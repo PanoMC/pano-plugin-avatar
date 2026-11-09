@@ -10,6 +10,7 @@ import com.panomc.platform.model.*
 import com.panomc.platform.util.ImageCompressionUtil
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.config.AvatarConfig
+import com.panomc.plugins.avatar.util.AvatarImages
 import com.panomc.plugins.avatar.config.AvatarType
 import com.panomc.plugins.avatar.db.dao.UserAvatarDao
 import com.panomc.plugins.avatar.db.model.UserAvatar
@@ -113,7 +114,9 @@ class PanelUpdatePlayerAvatarAPI(
                     throw BadRequest()
                 }
 
-                if (!config.allowedTypes.contains(fileUpload.contentType())) {
+                // The type is read from the file's content, not from what the client claims.
+                val detectedType = AvatarImages.detectMimeType(File(fileUpload.uploadedFileName()))
+                if (detectedType == null || !config.allowedTypes.contains(detectedType)) {
                     throw BadRequest()
                 }
 
@@ -156,7 +159,7 @@ class PanelUpdatePlayerAvatarAPI(
     private fun saveUploadedFile(fileUpload: io.vertx.ext.web.FileUpload, config: AvatarConfig): String {
         val originalFile = File(fileUpload.uploadedFileName())
         val originalBytes = originalFile.readBytes()
-        val mimeType = fileUpload.contentType() ?: "image/png"
+        val mimeType = AvatarImages.detectMimeType(originalFile) ?: throw BadRequest()
 
         val (optimizedBytes, finalMimeType) = if (mimeType == "image/gif") {
             originalBytes to mimeType
@@ -170,12 +173,7 @@ class PanelUpdatePlayerAvatarAPI(
             )
         }
 
-        val extension = when (finalMimeType) {
-            "image/jpeg" -> "jpg"
-            "image/png" -> "png"
-            "image/gif" -> "gif"
-            else -> fileUpload.fileName().split(".").last()
-        }
+        val extension = AvatarImages.extensionOf(finalMimeType) ?: throw BadRequest()
 
         val fileName = "${System.currentTimeMillis()}-${fileUpload.uploadedFileName().split(File.separator).last()}.$extension"
         val destFile = File(plugin.uploadsDir, fileName)

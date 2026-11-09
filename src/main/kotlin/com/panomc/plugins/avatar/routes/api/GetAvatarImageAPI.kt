@@ -2,7 +2,7 @@ package com.panomc.plugins.avatar.routes.api
 
 import com.panomc.platform.annotation.Endpoint
 import com.panomc.platform.model.*
-import com.panomc.platform.util.MimeTypeUtil
+import com.panomc.plugins.avatar.util.AvatarImages
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.db.dao.UserAvatarDao
 import io.vertx.ext.web.RoutingContext
@@ -56,10 +56,18 @@ class GetAvatarImageAPI(
             return null
         }
 
-        val mimeType = MimeTypeUtil.getMimeTypeFromFileName(file.absolutePath)
+        // Only supported raster images are served; an avatar stored with any other extension is never rendered.
+        val mimeType = AvatarImages.mimeTypeOfFile(file.name)
+
+        if (mimeType == null) {
+            context.response().setStatusCode(404).end()
+            return null
+        }
 
         val response = context.response()
         response.putHeader("Content-Type", mimeType)
+        response.putHeader("X-Content-Type-Options", "nosniff")
+        response.putHeader("Content-Security-Policy", "default-src 'none'; sandbox")
         response.putHeader("Cache-Control", "public, max-age=$CACHE_TTL_SECONDS, immutable")
 
         try {

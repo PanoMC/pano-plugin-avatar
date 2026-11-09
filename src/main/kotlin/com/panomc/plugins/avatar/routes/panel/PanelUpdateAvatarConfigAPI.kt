@@ -7,6 +7,8 @@ import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.model.*
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.config.AvatarConfig
+import com.panomc.plugins.avatar.util.AvatarImages
+import com.panomc.platform.error.BadRequest
 import com.panomc.plugins.avatar.log.UpdatedAvatarSettingsLog
 import com.panomc.plugins.avatar.permission.ManageAvatarSettingsPermission
 import io.vertx.ext.web.RoutingContext
@@ -56,6 +58,13 @@ class PanelUpdateAvatarConfigAPI(
         authProvider.requirePermission(ManageAvatarSettingsPermission(), context)
 
         val body = context.body().asJsonObject()
+
+        // Only raster image types can be allowed; SVG, HTML and other types could carry scripts.
+        val allowedTypes = body.getJsonArray("allowedTypes")
+        if (allowedTypes != null && allowedTypes.any { it !is String || !AvatarImages.SUPPORTED_TYPES.containsKey(it) }) {
+            throw BadRequest()
+        }
+
         configManager.saveConfig(body)
 
         val sqlClient = getSqlClient()
