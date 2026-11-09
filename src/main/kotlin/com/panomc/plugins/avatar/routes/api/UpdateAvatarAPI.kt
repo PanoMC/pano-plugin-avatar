@@ -5,7 +5,6 @@ import com.panomc.platform.api.config.PluginConfigManager
 import com.panomc.platform.auth.AuthProvider
 import com.panomc.platform.error.BadRequest
 import com.panomc.platform.model.*
-import com.panomc.platform.util.ImageCompressionUtil
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.config.AvatarConfig
 import com.panomc.plugins.avatar.util.AvatarImages
@@ -153,21 +152,11 @@ class UpdateAvatarAPI(
 
     private fun saveUploadedFile(fileUpload: io.vertx.ext.web.FileUpload, config: AvatarConfig): String {
         val originalFile = File(fileUpload.uploadedFileName())
-        val originalBytes = originalFile.readBytes()
         val mimeType = AvatarImages.detectMimeType(originalFile) ?: throw BadRequest()
 
-        // Skip optimization for GIF (animated GIFs would break)
-        val (optimizedBytes, finalMimeType) = if (mimeType == "image/gif") {
-            originalBytes to mimeType
-        } else {
-            val maxSizeBytes = (config.maxSizeMb * 1024 * 1024).toInt()
-            ImageCompressionUtil.compressImage(
-                originalBytes = originalBytes,
-                mimeType = mimeType,
-                maxSizeBytes = maxSizeBytes,
-                maxDimension = AVATAR_MAX_DIMENSION
-            )
-        }
+        // Always decoded and re-encoded at avatar size, so oversized images and non-image payloads never get stored.
+        val (optimizedBytes, finalMimeType) =
+            AvatarImages.normalize(originalFile, mimeType, AVATAR_MAX_DIMENSION) ?: throw BadRequest()
 
         // Determine final extension based on output mime type
         val extension = AvatarImages.extensionOf(finalMimeType) ?: throw BadRequest()

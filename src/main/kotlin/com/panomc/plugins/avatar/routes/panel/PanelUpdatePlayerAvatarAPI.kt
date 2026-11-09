@@ -7,7 +7,6 @@ import com.panomc.platform.db.DatabaseManager
 import com.panomc.platform.error.BadRequest
 import com.panomc.platform.error.NotFound
 import com.panomc.platform.model.*
-import com.panomc.platform.util.ImageCompressionUtil
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.config.AvatarConfig
 import com.panomc.plugins.avatar.util.AvatarImages
@@ -158,20 +157,11 @@ class PanelUpdatePlayerAvatarAPI(
 
     private fun saveUploadedFile(fileUpload: io.vertx.ext.web.FileUpload, config: AvatarConfig): String {
         val originalFile = File(fileUpload.uploadedFileName())
-        val originalBytes = originalFile.readBytes()
         val mimeType = AvatarImages.detectMimeType(originalFile) ?: throw BadRequest()
 
-        val (optimizedBytes, finalMimeType) = if (mimeType == "image/gif") {
-            originalBytes to mimeType
-        } else {
-            val maxSizeBytes = (config.maxSizeMb * 1024 * 1024).toInt()
-            ImageCompressionUtil.compressImage(
-                originalBytes = originalBytes,
-                mimeType = mimeType,
-                maxSizeBytes = maxSizeBytes,
-                maxDimension = AVATAR_MAX_DIMENSION
-            )
-        }
+        // Always decoded and re-encoded at avatar size, so oversized images and non-image payloads never get stored.
+        val (optimizedBytes, finalMimeType) =
+            AvatarImages.normalize(originalFile, mimeType, AVATAR_MAX_DIMENSION) ?: throw BadRequest()
 
         val extension = AvatarImages.extensionOf(finalMimeType) ?: throw BadRequest()
 
