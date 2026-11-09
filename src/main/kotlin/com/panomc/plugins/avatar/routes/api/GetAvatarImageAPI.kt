@@ -32,6 +32,8 @@ class GetAvatarImageAPI(
 
     companion object {
         private const val CACHE_TTL_SECONDS = 7 * 24 * 60 * 60 // 1 week
+
+        private val SAFE_FILE_NAME = Regex("^[A-Za-z0-9._-]+$")
     }
 
     override fun getValidationHandler(schemaRepository: SchemaRepository): ValidationHandler =
@@ -43,16 +45,13 @@ class GetAvatarImageAPI(
         val parameters = getParameters(context)
         val fileName = parameters.pathParameter("fileName").string
 
-        val file = File(plugin.uploadsDir, fileName)
+        // Security: only a plain file name directly inside the uploads dir, checked before the disk is touched, and
+        // every miss answers the same 404 so nothing can be learned about other paths on the server.
+        val uploadsDir = plugin.uploadsDir.canonicalFile
+        val file = if (SAFE_FILE_NAME.matches(fileName) && !fileName.contains("..")) File(uploadsDir, fileName) else null
 
-        if (!file.exists()) {
+        if (file == null || file.canonicalFile.parentFile != uploadsDir || !file.isFile) {
             context.response().setStatusCode(404).end()
-            return null
-        }
-
-        // Security: ensure file is within uploads dir (prevent path traversal)
-        if (!file.canonicalPath.startsWith(plugin.uploadsDir.canonicalPath)) {
-            context.response().setStatusCode(403).end()
             return null
         }
 
