@@ -425,11 +425,18 @@
                         "string",
                         "null"
                       ]
+                    },
+                    "minecraftUsername": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     }
                   },
                   "required": [
                     "avatarType",
-                    "fileName"
+                    "fileName",
+                    "minecraftUsername"
                   ],
                   "type": "object"
                 }

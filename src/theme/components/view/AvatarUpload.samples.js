@@ -14,7 +14,7 @@ export default {
   filled: {
     props: {
       onRegister: null,
-      data: { config, avatar: { avatarType: 'CUSTOM', fileName: 'sample.png' } },
+      data: { config, avatar: { avatarType: 'CUSTOM', fileName: 'sample.png', minecraftUsername: null } },
     },
   },
   empty: {

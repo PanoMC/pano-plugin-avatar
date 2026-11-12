@@ -39,7 +39,7 @@ class ProfilePictureEventHandler(
         }
 
         return when (avatarType) {
-            AvatarType.MINOTAR -> "https://minotar.net/avatar/${user.username}"
+            AvatarType.MINOTAR -> "https://minotar.net/avatar/${userAvatar.minecraftUsername ?: user.username}"
             AvatarType.GRAVATAR -> {
                 val email = user.email ?: return null
                 val emailHash = md5Hex(email.trim().lowercase())

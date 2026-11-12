@@ -29,7 +29,8 @@ class GetAvatarAPI(
         tag = "avatar",
         response = objectSchema()
             .requiredProperty("avatarType", stringSchema())
-            .requiredProperty("fileName", stringSchema().nullable()),
+            .requiredProperty("fileName", stringSchema().nullable())
+            .requiredProperty("minecraftUsername", stringSchema().nullable()),
         errors = listOf(NotFound::class)
     )
 
@@ -55,10 +56,12 @@ class GetAvatarAPI(
             JsonObject()
                 .put("avatarType", userAvatar.avatarType)
                 .put("fileName", userAvatar.fileName)
+                .put("minecraftUsername", userAvatar.minecraftUsername)
         } else {
             JsonObject()
                 .put("avatarType", "MINOTAR")
                 .put("fileName", null as String?)
+                .put("minecraftUsername", null as String?)
         }
 
         return Successful(result.map)

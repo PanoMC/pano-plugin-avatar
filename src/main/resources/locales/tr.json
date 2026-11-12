@@ -9,6 +9,8 @@
   "gravatar": "Gravatar",
   "minotar-info": "{username} kullanıcısının Minecraft skinini kullanır",
   "gravatar-info": "{email} e-postasına bağlı Gravatarı kullanır",
+  "minecraft-username": "Minecraft kullanıcı adı (kendi adını kullanmak için boş bırak)",
+  "minecraft-username-invalid": "Minecraft kullanıcı adı en fazla 16 harf, rakam veya alt çizgiden oluşur.",
   "buttons": {
     "upload": "Resim Yükle",
     "cancel": "İptal",

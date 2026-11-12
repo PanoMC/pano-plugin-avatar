@@ -24,6 +24,7 @@ class UserAvatarDaoImpl : UserAvatarDao() {
                       `userId` bigint NOT NULL,
                       `avatarType` VARCHAR(32) NOT NULL DEFAULT 'MINOTAR',
                       `fileName` VARCHAR(255) DEFAULT NULL,
+                      `minecraftUsername` VARCHAR(16) DEFAULT NULL,
                       `createdAt` BIGINT(20) NOT NULL,
                       `updatedAt` BIGINT(20) NOT NULL,
                       PRIMARY KEY (`id`),
@@ -43,9 +44,9 @@ class UserAvatarDaoImpl : UserAvatarDao() {
 
     override suspend fun upsert(userAvatar: UserAvatar, sqlClient: SqlClient) {
         val query = """
-            INSERT INTO `${getTablePrefix() + tableName}` (`userId`, `avatarType`, `fileName`, `createdAt`, `updatedAt`)
-            VALUES (?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE `avatarType` = VALUES(`avatarType`), `fileName` = VALUES(`fileName`), `updatedAt` = VALUES(`updatedAt`)
+            INSERT INTO `${getTablePrefix() + tableName}` (`userId`, `avatarType`, `fileName`, `minecraftUsername`, `createdAt`, `updatedAt`)
+            VALUES (?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE `avatarType` = VALUES(`avatarType`), `fileName` = VALUES(`fileName`), `minecraftUsername` = VALUES(`minecraftUsername`), `updatedAt` = VALUES(`updatedAt`)
         """.trimIndent()
         sqlClient.preparedQuery(query)
             .execute(
@@ -53,6 +54,7 @@ class UserAvatarDaoImpl : UserAvatarDao() {
                     userAvatar.userId,
                     userAvatar.avatarType,
                     userAvatar.fileName,
+                    userAvatar.minecraftUsername,
                     userAvatar.createdAt,
                     userAvatar.updatedAt
                 )

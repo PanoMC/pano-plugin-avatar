@@ -8,6 +8,7 @@ import com.panomc.platform.model.*
 import com.panomc.plugins.avatar.AvatarPlugin
 import com.panomc.plugins.avatar.config.AvatarConfig
 import com.panomc.plugins.avatar.util.AvatarImages
+import com.panomc.plugins.avatar.util.MinecraftUsernames
 import com.panomc.plugins.avatar.config.AvatarType
 import com.panomc.plugins.avatar.db.dao.UserAvatarDao
 import com.panomc.plugins.avatar.db.model.UserAvatar
@@ -73,6 +74,7 @@ class UpdateAvatarAPI(
                 Bodies.multipartFormData(
                     objectSchema()
                         .requiredProperty("avatarType", stringSchema())
+                        .optionalProperty("minecraftUsername", stringSchema())
                 )
             )
             .build()
@@ -99,6 +101,10 @@ class UpdateAvatarAPI(
         val sqlClient = getSqlClient()
 
         var fileName: String? = null
+
+        // Only Minotar shows another player's head; any other source forgets the name.
+        val minecraftUsername =
+            if (avatarType == AvatarType.MINOTAR) MinecraftUsernames.parse(data.getString("minecraftUsername")) else null
 
         if (avatarType == AvatarType.CUSTOM) {
             val fileUploads = context.fileUploads()
@@ -142,7 +148,8 @@ class UpdateAvatarAPI(
         val userAvatar = UserAvatar(
             userId = userId,
             avatarType = avatarType.name,
-            fileName = fileName
+            fileName = fileName,
+            minecraftUsername = minecraftUsername
         )
 
         userAvatarDao.upsert(userAvatar, sqlClient)

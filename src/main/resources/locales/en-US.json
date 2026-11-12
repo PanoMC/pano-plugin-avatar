@@ -9,6 +9,8 @@
   "gravatar": "Gravatar",
   "minotar-info": "Using Minecraft skin of {username}",
   "gravatar-info": "Using Gravatar for {email}",
+  "minecraft-username": "Minecraft username (leave empty to use your own)",
+  "minecraft-username-invalid": "A Minecraft username has up to 16 letters, digits or underscores.",
   "buttons": {
     "upload": "Upload Image",
     "cancel": "Cancel",

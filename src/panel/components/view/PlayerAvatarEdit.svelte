@@ -57,9 +57,23 @@
             {/if}
           </div>
         {:else if avatarType === 'MINOTAR'}
-           <div class="text-muted small">
-             <i class="fas fa-info-circle me-1"></i>
-             {$_('minotar-info', { values: { username: targetUsername || 'user' } })}
+           <div class="vstack gap-2">
+             <input
+               type="text"
+               class="form-control form-control-sm"
+               class:is-invalid={!minecraftUsernameValid}
+               maxlength="16"
+               placeholder={targetUsername || ''}
+               aria-label={$_('minecraft-username')}
+               bind:value={minecraftUsername} />
+             <div class="text-muted small">
+               <i class="fas fa-info-circle me-1"></i>
+               {#if minecraftUsernameValid}
+                 {$_('minotar-info', { values: { username: minotarName } })}
+               {:else}
+                 {$_('minecraft-username-invalid')}
+               {/if}
+             </div>
            </div>
         {:else if avatarType === 'GRAVATAR'}
            <div class="text-muted small">
@@ -95,6 +109,9 @@
   let initialType = 'MINOTAR';
   let currentFileName = null;
   let avatarType = 'MINOTAR';
+  // Another Minecraft player whose head is shown; empty = the player's own username.
+  let initialMinecraftUsername = '';
+  let minecraftUsername = '';
 
   // User-modified state
   let selectedFile = null;
@@ -103,7 +120,10 @@
   let uploading = false;
 
   // Derived values for preview
-  $: minotarSrc = `https://minotar.net/avatar/${targetUsername || 'char'}/80`;
+  $: minecraftUsernameTrimmed = (minecraftUsername || '').trim();
+  $: minecraftUsernameValid = minecraftUsernameTrimmed === '' || /^[A-Za-z0-9_]{1,16}$/.test(minecraftUsernameTrimmed);
+  $: minotarName = (minecraftUsernameValid && minecraftUsernameTrimmed) || targetUsername || 'char';
+  $: minotarSrc = `https://minotar.net/avatar/${encodeURIComponent(minotarName)}/80`;
 
   $: previewSrc =
     avatarType === 'MINOTAR' ? minotarSrc :
@@ -114,7 +134,8 @@
 
   $: isDirty =
     avatarType !== initialType ||
-    (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile));
+    (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile)) ||
+    (avatarType === 'MINOTAR' && minecraftUsernameTrimmed !== initialMinecraftUsername);
 
   /** Edit modal reuses the same card row instance for every player; reload when username or email changes. */
   let lastLoadKey = null;
@@ -153,6 +174,8 @@
         initialType = avatarRes.avatarType || 'MINOTAR';
         currentFileName = avatarRes.fileName || null;
         avatarType = initialType;
+        initialMinecraftUsername = avatarRes.minecraftUsername || '';
+        minecraftUsername = initialMinecraftUsername;
       }
     } catch (e) {
       console.error('[pano-plugin-avatar] Failed to load data for panel edit', e);
@@ -170,12 +193,17 @@
 
   async function saveAvatar() {
     if (!isDirty) return;
+    if (avatarType === 'MINOTAR' && !minecraftUsernameValid) return;
 
     uploading = true;
 
     try {
       const formData = new FormData();
       formData.append('avatarType', avatarType);
+
+      if (avatarType === 'MINOTAR') {
+        formData.append('minecraftUsername', minecraftUsernameTrimmed);
+      }
 
       if (avatarType === 'CUSTOM' && selectedFile) {
         formData.append('avatar', selectedFile);
@@ -193,6 +221,8 @@
 
       // Update initial state after successful save
       initialType = avatarType;
+      initialMinecraftUsername = avatarType === 'MINOTAR' ? minecraftUsernameTrimmed : '';
+      if (avatarType !== 'MINOTAR') minecraftUsername = '';
 
       // Bust avatar caches globally
       updateAvatarVersion();
@@ -257,6 +287,7 @@
 
   function resetAvatar() {
     avatarType = initialType;
+    minecraftUsername = initialMinecraftUsername;
     selectedFile = null;
     selectedFilePreview = null;
     removeFile = false;

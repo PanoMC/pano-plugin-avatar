@@ -7,6 +7,7 @@ open class UserAvatar(
     val userId: Long = -1,
     val avatarType: String = "MINOTAR",
     val fileName: String? = null,
+    val minecraftUsername: String? = null,
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 ) : DBEntity()

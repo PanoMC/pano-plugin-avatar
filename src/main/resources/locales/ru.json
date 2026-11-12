@@ -9,6 +9,8 @@
     "gravatar": "Gravatar",
     "minotar-info": "Используется скин Minecraft игрока {username}",
     "gravatar-info": "Используется Gravatar для {email}",
+    "minecraft-username": "Ник в Minecraft (оставьте пустым, чтобы использовать свой)",
+    "minecraft-username-invalid": "Ник в Minecraft — до 16 латинских букв, цифр или подчёркиваний.",
     "buttons": {
         "upload": "Загрузить",
         "cancel": "Отмена",

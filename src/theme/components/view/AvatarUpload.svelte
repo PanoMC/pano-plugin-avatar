@@ -57,9 +57,23 @@
             {/if}
           </div>
         {:else if avatarType === 'MINOTAR'}
-           <div class="text-muted small">
-             <i class="fas fa-info-circle me-1"></i>
-             {$_('minotar-info', { values: { username: session?.user?.username || 'user' } })}
+           <div class="vstack gap-2">
+             <input
+               type="text"
+               class="avatar-avatar-upload__minecraft-username form-control form-control-sm"
+               class:is-invalid={!minecraftUsernameValid}
+               maxlength="16"
+               placeholder={session?.user?.username || ''}
+               aria-label={$_('minecraft-username')}
+               bind:value={minecraftUsername} />
+             <div class="text-muted small">
+               <i class="fas fa-info-circle me-1"></i>
+               {#if minecraftUsernameValid}
+                 {$_('minotar-info', { values: { username: minotarName } })}
+               {:else}
+                 {$_('minecraft-username-invalid')}
+               {/if}
+             </div>
            </div>
         {:else if avatarType === 'GRAVATAR'}
            <div class="text-muted small">
@@ -151,6 +165,9 @@
   let initialType = $state(data?.avatar?.avatarType || 'MINOTAR');
   let currentFileName = $state(data?.avatar?.fileName || null);
   let avatarType = $state(data?.avatar?.avatarType || 'MINOTAR');
+  // Another Minecraft player whose head is shown; empty = the user's own username.
+  let initialMinecraftUsername = $state(data?.avatar?.minecraftUsername || '');
+  let minecraftUsername = $state(data?.avatar?.minecraftUsername || '');
 
   // Handle client-side data updates (e.g. re-navigation, prop changes after initial load)
   $effect(() => {
@@ -160,12 +177,17 @@
         const apiType = avatar.avatarType || 'MINOTAR';
         const apiFile = avatar.fileName || null;
 
+        const apiMinecraftUsername = avatar.minecraftUsername || '';
+        const wasDirty = isDirty;
+
         if (initialType !== apiType) initialType = apiType;
         if (currentFileName !== apiFile) currentFileName = apiFile;
+        if (initialMinecraftUsername !== apiMinecraftUsername) initialMinecraftUsername = apiMinecraftUsername;
 
         // Sync user selection only if not modified (not dirty)
-        if (!isDirty && avatarType !== apiType) {
-          avatarType = apiType;
+        if (!wasDirty) {
+          if (avatarType !== apiType) avatarType = apiType;
+          if (minecraftUsername !== apiMinecraftUsername) minecraftUsername = apiMinecraftUsername;
         }
       }
     });
@@ -178,7 +200,14 @@
   let uploading = $state(false);
 
   // Derived values for preview
-  const minotarSrc = $derived(`https://minotar.net/avatar/${session?.user?.username || 'char'}/80`);
+  const minecraftUsernameTrimmed = $derived(minecraftUsername.trim());
+  const minecraftUsernameValid = $derived(
+    minecraftUsernameTrimmed === '' || /^[A-Za-z0-9_]{1,16}$/.test(minecraftUsernameTrimmed)
+  );
+  const minotarName = $derived(
+    (minecraftUsernameValid && minecraftUsernameTrimmed) || session?.user?.username || 'char'
+  );
+  const minotarSrc = $derived(`https://minotar.net/avatar/${encodeURIComponent(minotarName)}/80`);
   const gravatarSrc = $derived.by(() => {
     const email = session?.user?.email;
     if (!email) return 'https://www.gravatar.com/avatar/000?s=80&d=identicon';
@@ -196,7 +225,8 @@
 
   const isDirty = $derived(
     avatarType !== initialType ||
-    (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile))
+    (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile)) ||
+    (avatarType === 'MINOTAR' && minecraftUsernameTrimmed !== initialMinecraftUsername)
   );
 
   $effect(() => {
@@ -211,11 +241,17 @@
   });
 
   async function saveAvatar() {
+    if (avatarType === 'MINOTAR' && !minecraftUsernameValid) return;
+
     uploading = true;
 
     try {
       const formData = new FormData();
       formData.append('avatarType', avatarType);
+
+      if (avatarType === 'MINOTAR') {
+        formData.append('minecraftUsername', minecraftUsernameTrimmed);
+      }
 
       if (avatarType === 'CUSTOM' && selectedFile) {
         formData.append('avatar', selectedFile);
@@ -233,6 +269,8 @@
 
       // Update initial state after successful save
       initialType = avatarType;
+      initialMinecraftUsername = avatarType === 'MINOTAR' ? minecraftUsernameTrimmed : '';
+      if (avatarType !== 'MINOTAR') minecraftUsername = '';
 
       // Bust avatar caches globally
       updateAvatarVersion();
@@ -306,6 +344,7 @@
 
   function resetAvatar() {
     avatarType = initialType;
+    minecraftUsername = initialMinecraftUsername;
     selectedFile = null;
     selectedFilePreview = null;
     removeFile = false;
