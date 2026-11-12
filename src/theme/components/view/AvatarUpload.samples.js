@@ -7,6 +7,7 @@ const config = {
   maxSizeMb: 2,
   allowedSources: ['MINOTAR', 'GRAVATAR', 'CUSTOM'],
   allowedTypes: ['image/png', 'image/jpeg', 'image/gif'],
+  allowCustomMinecraftUsername: true,
 };
 
 /** @type {import('@panomc/plugin-kit').Samples} */

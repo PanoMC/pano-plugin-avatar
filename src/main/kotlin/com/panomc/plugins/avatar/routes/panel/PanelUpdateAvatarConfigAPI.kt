@@ -50,6 +50,7 @@ class PanelUpdateAvatarConfigAPI(
                                 .requiredProperty("urlTemplate", stringSchema())
                                 .requiredProperty("identifierField", stringSchema())
                         ))
+                        .optionalProperty("allowCustomMinecraftUsername", booleanSchema())
                 )
             )
             .build()

@@ -44,6 +44,8 @@
     "allowed-types-desc": "Kullanıcıların yükleyebileceği resim formatları",
     "allowed-sources": "İzin Verilen Avatar Kaynakları",
     "allowed-sources-desc": "Kullanıcılara sunulan avatar kaynakları",
+    "allow-custom-minecraft-username": "Başka Oyuncuların Minecraft Kafaları",
+    "allow-custom-minecraft-username-desc": "Minotar kullanan oyuncular başka bir Minecraft kullanıcı adı yazıp o oyuncunun kafasını gösterebilir. Kapalıyken herkes kendi kafasını gösterir.",
     "custom-upload": "Özel Yükleme",
     "custom-sources": "Özel URL Kaynakları",
     "custom-sources-desc": "URL şablonları kullanarak özel avatar kaynakları ekleyin",

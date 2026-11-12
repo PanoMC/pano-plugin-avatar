@@ -58,6 +58,7 @@
           </div>
         {:else if avatarType === 'MINOTAR'}
            <div class="vstack gap-2">
+             {#if allowCustomMinecraftUsername}
              <input
                type="text"
                class="avatar-avatar-upload__minecraft-username form-control form-control-sm"
@@ -66,6 +67,7 @@
                placeholder={session?.user?.username || ''}
                aria-label={$_('minecraft-username')}
                bind:value={minecraftUsername} />
+             {/if}
              <div class="text-muted small">
                <i class="fas fa-info-circle me-1"></i>
                {#if minecraftUsernameValid}
@@ -158,6 +160,8 @@
   const allowedSources = $derived(data?.config?.allowedSources || ['MINOTAR', 'GRAVATAR', 'CUSTOM']);
   const allowedTypes = $derived(data?.config?.allowedTypes || ['image/png', 'image/jpeg', 'image/gif']);
   const allowedTypesAccept = $derived(allowedTypes.join(', '));
+  // Older Pano answers without the key: allowed, the plugin's default.
+  const allowCustomMinecraftUsername = $derived(data?.config?.allowCustomMinecraftUsername !== false);
 
   // Avatar data from API — initialized directly from data prop for SSR support
   // (state_referenced_locally warning is intentional: we capture the initial SSR value,
@@ -200,7 +204,7 @@
   let uploading = $state(false);
 
   // Derived values for preview
-  const minecraftUsernameTrimmed = $derived(minecraftUsername.trim());
+  const minecraftUsernameTrimmed = $derived(allowCustomMinecraftUsername ? minecraftUsername.trim() : '');
   const minecraftUsernameValid = $derived(
     minecraftUsernameTrimmed === '' || /^[A-Za-z0-9_]{1,16}$/.test(minecraftUsernameTrimmed)
   );
@@ -226,7 +230,7 @@
   const isDirty = $derived(
     avatarType !== initialType ||
     (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile)) ||
-    (avatarType === 'MINOTAR' && minecraftUsernameTrimmed !== initialMinecraftUsername)
+    (avatarType === 'MINOTAR' && allowCustomMinecraftUsername && minecraftUsernameTrimmed !== initialMinecraftUsername)
   );
 
   $effect(() => {
@@ -249,7 +253,7 @@
       const formData = new FormData();
       formData.append('avatarType', avatarType);
 
-      if (avatarType === 'MINOTAR') {
+      if (avatarType === 'MINOTAR' && allowCustomMinecraftUsername) {
         formData.append('minecraftUsername', minecraftUsernameTrimmed);
       }
 

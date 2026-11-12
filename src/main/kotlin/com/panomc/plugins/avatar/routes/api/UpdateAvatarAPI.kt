@@ -102,9 +102,11 @@ class UpdateAvatarAPI(
 
         var fileName: String? = null
 
-        // Only Minotar shows another player's head; any other source forgets the name.
+        // Only Minotar shows another player's head, and only while the admin allows it; otherwise the name is dropped.
         val minecraftUsername =
-            if (avatarType == AvatarType.MINOTAR) MinecraftUsernames.parse(data.getString("minecraftUsername")) else null
+            if (avatarType == AvatarType.MINOTAR && config.allowCustomMinecraftUsername)
+                MinecraftUsernames.parse(data.getString("minecraftUsername"))
+            else null
 
         if (avatarType == AvatarType.CUSTOM) {
             val fileUploads = context.fileUploads()

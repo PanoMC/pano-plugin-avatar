@@ -58,6 +58,7 @@
           </div>
         {:else if avatarType === 'MINOTAR'}
            <div class="vstack gap-2">
+             {#if allowCustomMinecraftUsername}
              <input
                type="text"
                class="form-control form-control-sm"
@@ -66,6 +67,7 @@
                placeholder={targetUsername || ''}
                aria-label={$_('minecraft-username')}
                bind:value={minecraftUsername} />
+             {/if}
              <div class="text-muted small">
                <i class="fas fa-info-circle me-1"></i>
                {#if minecraftUsernameValid}
@@ -104,6 +106,8 @@
   let allowedSources = ['MINOTAR', 'GRAVATAR', 'CUSTOM'];
   let allowedTypes = ['image/png', 'image/jpeg', 'image/gif'];
   $: allowedTypesAccept = allowedTypes.join(', ');
+  // Older Pano answers without the key: allowed, the plugin's default.
+  let allowCustomMinecraftUsername = true;
 
   // Avatar data
   let initialType = 'MINOTAR';
@@ -120,7 +124,7 @@
   let uploading = false;
 
   // Derived values for preview
-  $: minecraftUsernameTrimmed = (minecraftUsername || '').trim();
+  $: minecraftUsernameTrimmed = allowCustomMinecraftUsername ? (minecraftUsername || '').trim() : '';
   $: minecraftUsernameValid = minecraftUsernameTrimmed === '' || /^[A-Za-z0-9_]{1,16}$/.test(minecraftUsernameTrimmed);
   $: minotarName = (minecraftUsernameValid && minecraftUsernameTrimmed) || targetUsername || 'char';
   $: minotarSrc = `https://minotar.net/avatar/${encodeURIComponent(minotarName)}/80`;
@@ -135,7 +139,7 @@
   $: isDirty =
     avatarType !== initialType ||
     (avatarType === 'CUSTOM' && (selectedFile !== null || removeFile)) ||
-    (avatarType === 'MINOTAR' && minecraftUsernameTrimmed !== initialMinecraftUsername);
+    (avatarType === 'MINOTAR' && allowCustomMinecraftUsername && minecraftUsernameTrimmed !== initialMinecraftUsername);
 
   /** Edit modal reuses the same card row instance for every player; reload when username or email changes. */
   let lastLoadKey = null;
@@ -168,6 +172,7 @@
         maxSizeMb = configRes.maxSizeMb || 1;
         allowedSources = configRes.allowedSources || ['MINOTAR', 'GRAVATAR', 'CUSTOM'];
         allowedTypes = configRes.allowedTypes || ['image/png', 'image/jpeg', 'image/gif'];
+        allowCustomMinecraftUsername = configRes.allowCustomMinecraftUsername !== false;
       }
 
       if (avatarRes && !avatarRes.error) {
@@ -201,7 +206,7 @@
       const formData = new FormData();
       formData.append('avatarType', avatarType);
 
-      if (avatarType === 'MINOTAR') {
+      if (avatarType === 'MINOTAR' && allowCustomMinecraftUsername) {
         formData.append('minecraftUsername', minecraftUsernameTrimmed);
       }
 

@@ -39,7 +39,13 @@ class ProfilePictureEventHandler(
         }
 
         return when (avatarType) {
-            AvatarType.MINOTAR -> "https://minotar.net/avatar/${userAvatar.minecraftUsername ?: user.username}"
+            AvatarType.MINOTAR -> {
+                // A name saved while it was allowed is ignored once the admin turns the option off.
+                val name = userAvatar.minecraftUsername
+                    ?.takeIf { configManager.config.allowCustomMinecraftUsername }
+                    ?: user.username
+                "https://minotar.net/avatar/$name"
+            }
             AvatarType.GRAVATAR -> {
                 val email = user.email ?: return null
                 val emailHash = md5Hex(email.trim().lowercase())

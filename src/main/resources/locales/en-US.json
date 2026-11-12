@@ -44,6 +44,8 @@
     "allowed-types-desc": "Which image formats users can upload",
     "allowed-sources": "Allowed Avatar Sources",
     "allowed-sources-desc": "Which avatar sources are available to users",
+    "allow-custom-minecraft-username": "Other Players' Minecraft Heads",
+    "allow-custom-minecraft-username-desc": "Players using Minotar can type another Minecraft username to show that player's head. When off, everyone shows their own.",
     "custom-upload": "Custom Upload",
     "custom-sources": "Custom URL Sources",
     "custom-sources-desc": "Add custom avatar sources using URL templates",

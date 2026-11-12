@@ -263,6 +263,9 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "allowCustomMinecraftUsername": {
+                      "type": "boolean"
+                    },
                     "allowedSources": {
                       "items": {
                         "type": "string"
@@ -302,6 +305,7 @@
                     }
                   },
                   "required": [
+                    "allowCustomMinecraftUsername",
                     "allowedSources",
                     "allowedTypes",
                     "customSources",

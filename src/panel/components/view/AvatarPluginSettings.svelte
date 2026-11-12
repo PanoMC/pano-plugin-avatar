@@ -114,6 +114,29 @@
         </div>
       </div>
 
+      <!-- Another player's Minecraft head -->
+      <div class="row mb-3">
+        <label class="col-md-6 col-form-label" for="allowCustomMinecraftUsername">
+          <span class="d-block">
+            {$_('settings.allow-custom-minecraft-username')}
+          </span>
+          <small>
+            {$_('settings.allow-custom-minecraft-username-desc')}
+          </small>
+        </label>
+        <div class="col-md-6 d-flex align-items-center">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="allowCustomMinecraftUsername"
+              checked={config.allowCustomMinecraftUsername !== false}
+              on:change={(e) => (config.allowCustomMinecraftUsername = e.target.checked)} />
+          </div>
+        </div>
+      </div>
+
       <!-- Custom Avatar Sources -->
       <div class="row mb-3">
         <div class="col-md-6 col-form-label">
@@ -185,6 +208,7 @@
     allowedTypes: ['image/png', 'image/jpeg', 'image/gif'],
     allowedSources: ['MINOTAR', 'GRAVATAR', 'CUSTOM'],
     customSources: [],
+    allowCustomMinecraftUsername: true,
   };
   let saving = false;
 

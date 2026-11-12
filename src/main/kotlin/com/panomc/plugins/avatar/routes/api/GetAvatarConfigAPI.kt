@@ -36,6 +36,7 @@ class GetAvatarConfigAPI(
                         .requiredProperty("identifierField", stringSchema())
                 )
             )
+            .requiredProperty("allowCustomMinecraftUsername", booleanSchema())
     )
 
     private val configManager by lazy {
@@ -58,6 +59,7 @@ class GetAvatarConfigAPI(
                     .put("urlTemplate", it.urlTemplate)
                     .put("identifierField", it.identifierField)
             }))
+            .put("allowCustomMinecraftUsername", config.allowCustomMinecraftUsername)
 
         return Successful(result.map)
     }
