@@ -1,27 +1,18 @@
 <div class="row pt-2 pb-3 mb-3 border-bottom animate__animated animate__fadeIn">
-  <label class="col-md-4 col-form-label pb-2">
+  <label for="avatar-type-panel" class="col-md-4 col-form-label pb-2">
     <div class="d-flex align-items-center gap-2 mb-2">
-      <i class="fas fa-user-circle text-secondary"></i>
-      <span class="fw-bold">{$_('panel-edit.avatar-title')}</span>
+      <span class="fw-bold">{$_('avatar-settings-title')}</span>
     </div>
-    <select class="form-select form-select-sm" bind:value={avatarType}>
-      {#each allowedSources as source}
-        <option value={source}>
-          {source === 'MINOTAR' ? $_('minotar') : source === 'GRAVATAR' ? $_('gravatar') : $_('custom')}
-        </option>
-      {/each}
-    </select>
-    <p class="text-secondary small mt-2 mb-0">{$_('panel-edit.avatar-desc', { values: { maxSize: maxSizeMb } })}</p>
   </label>
   
   <div class="col col-form-label">
-    <div class="d-flex align-items-center gap-4">
+    <div class="d-flex align-items-start gap-4">
       <div class="position-relative">
         <img
           src={previewSrc}
           alt="Avatar Preview"
-          class="rounded-circle border border-2 p-1 bg-white object-fit-cover shadow-sm"
-          style="width: 80px; height: 80px;" />
+          class="rounded-circle bg-white object-fit-cover shadow-sm"
+          style="width: 64px; height: 64px;" />
         
         {#if uploading}
           <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75 rounded-circle">
@@ -31,10 +22,34 @@
       </div>
 
       <div class="flex-grow-1">
+        <div>
+          <select
+            id="avatar-type-panel"
+            class="form-select"
+            class:rounded-bottom-0={avatarType === 'MINOTAR' && allowCustomMinecraftUsername}
+            bind:value={avatarType}>
+            {#each allowedSources as source}
+              <option value={source}>
+                {source === 'MINOTAR' ? $_('minotar') : source === 'GRAVATAR' ? $_('gravatar') : $_('custom')}
+              </option>
+            {/each}
+          </select>
+          {#if avatarType === 'MINOTAR' && allowCustomMinecraftUsername}
+            <input
+              type="text"
+              class="form-control rounded-top-0 border-top-0"
+              class:is-invalid={!minecraftUsernameValid}
+              maxlength="16"
+              placeholder={targetUsername || ''}
+              aria-label={$_('minecraft-username')}
+              bind:value={minecraftUsername} />
+          {/if}
+        </div>
         {#if avatarType === 'CUSTOM'}
-          <div class="vstack gap-2">
-            <div class="d-flex gap-2">
-              <label for="avatar-input-panel" class="btn btn-sm btn-outline-primary px-3">
+          <div class="vstack gap-2 mt-2">
+            <p class="text-body-secondary small mb-0">{$_('panel-edit.avatar-desc', { values: { maxSize: maxSizeMb } })}</p>
+            <div class="d-flex align-items-center gap-2">
+              <label for="avatar-input-panel" class="btn btn-sm btn-primary">
                 <i class="fas fa-upload me-1"></i> {$_('buttons.upload')}
               </label>
               <input
@@ -44,43 +59,25 @@
                 accept={allowedTypesAccept}
                 on:change={handleFileChange} />
 
+              {#if selectedFile || (currentFileName && !removeFile)}
+                <button
+                  type="button"
+                  class="btn-close"
+                  title={$_('buttons.remove')}
+                  aria-label={$_('buttons.remove')}
+                  on:click={removeAvatar}></button>
+              {/if}
               {#if isDirty}
                 <button class="btn btn-sm btn-link text-decoration-none px-0" on:click={resetAvatar}>
                    {$_('buttons.cancel')}
                 </button>
               {/if}
             </div>
-            {#if selectedFile || (currentFileName && !removeFile)}
-              <button class="btn btn-sm btn-link text-danger text-decoration-none p-0 text-start" on:click={removeAvatar}>
-                 <i class="fas fa-trash-alt me-1"></i> {$_('buttons.remove')}
-              </button>
-            {/if}
           </div>
-        {:else if avatarType === 'MINOTAR'}
-           <div class="vstack gap-2">
-             {#if allowCustomMinecraftUsername}
-             <input
-               type="text"
-               class="form-control form-control-sm"
-               class:is-invalid={!minecraftUsernameValid}
-               maxlength="16"
-               placeholder={targetUsername || ''}
-               aria-label={$_('minecraft-username')}
-               bind:value={minecraftUsername} />
-             {/if}
-             <div class="text-muted small">
-               <i class="fas fa-info-circle me-1"></i>
-               {#if minecraftUsernameValid}
-                 {$_('minotar-info', { values: { username: minotarName } })}
-               {:else}
-                 {$_('minecraft-username-invalid')}
-               {/if}
-             </div>
-           </div>
-        {:else if avatarType === 'GRAVATAR'}
-           <div class="text-muted small">
+        {:else if avatarType === 'MINOTAR' && !minecraftUsernameValid}
+           <div class="text-muted small mt-2">
              <i class="fas fa-info-circle me-1"></i>
-             {$_('gravatar-info', { values: { email: targetEmail || 'email' } })}
+             {$_('minecraft-username-invalid')}
            </div>
         {/if}
       </div>
@@ -98,7 +95,6 @@
   const defaultPreview = "https://api.dicebear.com/7.x/avataaars/svg?seed=Pano";
 
   let targetUsername = '';
-  let targetEmail = '';
 
   // Config from API
   let config = null;
@@ -149,7 +145,6 @@
     if (k !== lastLoadKey) {
       lastLoadKey = k;
       targetUsername = playerData.username;
-      targetEmail = playerData?.email || '';
       selectedFile = null;
       selectedFilePreview = null;
       removeFile = false;

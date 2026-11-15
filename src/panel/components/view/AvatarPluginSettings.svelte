@@ -154,14 +154,12 @@
                 <div class="mb-2">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control rounded-bottom-0"
                     placeholder={$_('settings.custom-source-title')}
                     bind:value={source.title} />
-                </div>
-                <div class="mb-2">
                   <input
                     type="text"
-                    class="form-control form-control-sm"
+                    class="form-control rounded-top-0 border-top-0"
                     placeholder={$_('settings.custom-source-url')}
                     bind:value={source.urlTemplate} />
                   <small class="text-muted">{$_('settings.custom-source-url-hint')}</small>
@@ -171,14 +169,14 @@
                     <option value="username">{$_('settings.identifier-username')}</option>
                     <option value="email">{$_('settings.identifier-email')}</option>
                   </select>
-                  <button class="btn btn-sm btn-outline-danger" on:click={() => removeCustomSource(index)} aria-label={$_('generic.remove')}>
+                  <button class="btn btn-sm btn-link text-danger" on:click={() => removeCustomSource(index)} title={$_('generic.remove')} aria-label={$_('generic.remove')}>
                     <i class="fas fa-trash-alt"></i>
                   </button>
                 </div>
               </div>
             </div>
           {/each}
-          <button class="btn btn-sm btn-outline-primary" on:click={addCustomSource}>
+          <button class="btn btn-sm btn-primary" on:click={addCustomSource}>
             <i class="fas fa-plus me-1"></i> {$_('settings.add-custom-source')}
           </button>
         </div>
