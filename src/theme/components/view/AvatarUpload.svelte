@@ -26,7 +26,7 @@
           <select
             id="avatar-type"
             class="avatar-avatar-upload__select form-select"
-            class:rounded-bottom-0={avatarType === 'MINOTAR' && allowCustomMinecraftUsername}
+            class:rounded-bottom-0={showsMinecraftUsername}
             bind:value={avatarType}>
             {#each allowedSources as source}
               <option value={source}>
@@ -166,6 +166,8 @@
   let initialType = $state(data?.avatar?.avatarType || 'MINOTAR');
   let currentFileName = $state(data?.avatar?.fileName || null);
   let avatarType = $state(data?.avatar?.avatarType || 'MINOTAR');
+  // The username field is joined under the select while the Minecraft head is chosen.
+  const showsMinecraftUsername = $derived(avatarType === 'MINOTAR' && allowCustomMinecraftUsername);
   // Another Minecraft player whose head is shown; empty = the user's own username.
   let initialMinecraftUsername = $state(data?.avatar?.minecraftUsername || '');
   let minecraftUsername = $state(data?.avatar?.minecraftUsername || '');
