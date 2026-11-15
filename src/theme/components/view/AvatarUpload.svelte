@@ -1,7 +1,6 @@
 <div class="avatar-avatar-upload row pt-2 pb-3 mb-3 border-bottom">
   <label class="col-md-4 col-form-label pb-2">
     <div class="d-flex align-items-center gap-2 mb-2">
-      <i class="fas fa-user-circle text-secondary"></i>
       <span class="fw-bold">{$_('avatar-settings-title')}</span>
     </div>
     <select class="avatar-avatar-upload__select form-select form-select-sm" bind:value={avatarType}>
@@ -11,7 +10,7 @@
         </option>
       {/each}
     </select>
-    <p class="text-secondary small mt-2 mb-0">{$_('avatar-upload-requirements', { values: { maxSize: maxSizeMb } })}</p>
+    <p class="text-body-secondary small mt-2 mb-0">{$_('avatar-upload-requirements', { values: { maxSize: maxSizeMb } })}</p>
   </label>
   
   <div class="col col-form-label">
@@ -20,8 +19,8 @@
         <img
           src={previewSrc}
           alt="Avatar Preview"
-          class="avatar-avatar-upload__image rounded-circle border border-2 p-1 bg-white object-fit-cover shadow-sm"
-          style="width: 80px; height: 80px;" />
+          class="avatar-avatar-upload__image rounded-circle bg-white object-fit-cover shadow-sm"
+          style="width: 64px; height: 64px;" />
         
         {#if uploading}
           <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75 rounded-circle">
