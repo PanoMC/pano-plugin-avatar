@@ -1,6 +1,7 @@
 {
   "generic": {
-    "save": "Save"
+    "save": "Save",
+    "remove": "Remove"
   },
   "avatar-settings-title": "Avatar Settings",
   "avatar-upload-requirements": "JPG, PNG or GIF. Max {maxSize}MB.",

@@ -1,6 +1,7 @@
 {
     "generic": {
-        "save": "Сохранить"
+        "save": "Сохранить",
+        "remove": "Удалить"
     },
     "avatar-settings-title": "Настройки аватара",
     "avatar-upload-requirements": "JPG, PNG или GIF. Макс. {maxSize}МБ.",

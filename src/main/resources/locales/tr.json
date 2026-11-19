@@ -1,6 +1,7 @@
 {
   "generic": {
-    "save": "Kaydet"
+    "save": "Kaydet",
+    "remove": "Kaldır"
   },
   "avatar-settings-title": "Avatar Ayarları",
   "avatar-upload-requirements": "JPG, PNG veya GIF. Maks {maxSize}MB.",
