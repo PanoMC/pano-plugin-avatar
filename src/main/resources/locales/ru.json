@@ -11,22 +11,22 @@
     "minotar-info": "Используется скин Minecraft игрока {username}",
     "gravatar-info": "Используется Gravatar для {email}",
     "minecraft-username": "Ник в Minecraft (оставьте пустым, чтобы использовать свой)",
-    "minecraft-username-invalid": "Ник в Minecraft — до 16 латинских букв, цифр или подчёркиваний.",
+    "minecraft-username-invalid": "Ник в Minecraft — до 16 латинских букв, цифр или подчеркиваний.",
     "buttons": {
         "upload": "Загрузить",
         "cancel": "Отмена",
         "remove": "Удалить"
     },
     "toasts": {
-        "save-success": "Аватар успешно сохранён.",
+        "save-success": "Аватар успешно сохранен.",
         "save-error": "Не удалось сохранить аватар.",
         "file-too-large": "Файл слишком большой. Максимальный размер — {maxSize}МБ.",
-        "invalid-type": "Недопустимый тип файла. Разрешённые: {types}."
+        "invalid-type": "Недопустимый тип файла. Разрешенные: {types}."
     },
     "permissions": {
         "MANAGE_AVATAR_SETTINGS": {
             "title": "Управление настройками аватара",
-            "description": "Возможность настраивать параметры плагина аватара: разрешённые источники, типы файлов и ограничения размера."
+            "description": "Возможность настраивать параметры аддона аватаров: разрешенные источники, типы файлов и ограничения размера."
         },
         "MANAGE_PLAYER_AVATAR": {
             "title": "Управление аватарами игроков",
@@ -34,16 +34,16 @@
         }
     },
     "activity-logs": {
-        "UPDATED_AVATAR_SETTINGS": "<b>{username}</b> обновил(а) настройки плагина аватара.",
+        "UPDATED_AVATAR_SETTINGS": "<b>{username}</b> обновил(а) настройки аддона аватаров.",
         "UPDATED_PLAYER_AVATAR": "<b>{username}</b> обновил(а) аватар игрока <b>{targetUsername}</b>."
     },
     "settings": {
         "title": "Настройки аватара",
         "max-size": "Максимальный размер загрузки",
         "max-size-desc": "Максимальный размер файла для пользовательских аватаров",
-        "allowed-types": "Разрешённые типы изображений",
+        "allowed-types": "Разрешенные типы изображений",
         "allowed-types-desc": "Какие форматы изображений могут загружать пользователи",
-        "allowed-sources": "Разрешённые источники аватаров",
+        "allowed-sources": "Разрешенные источники аватаров",
         "allowed-sources-desc": "Какие источники аватаров доступны пользователям",
         "allow-custom-minecraft-username": "Головы других игроков Minecraft",
         "allow-custom-minecraft-username-desc": "Игроки с Minotar могут ввести другой ник Minecraft, чтобы показывать голову этого игрока. Если выключено, каждый показывает свою.",
@@ -54,11 +54,13 @@
         "custom-source-url": "Шаблон URL",
         "custom-source-url-hint": "Используйте {identifier} как заполнитель, например https://example.com/avatar/{identifier}",
         "identifier-username": "Имя пользователя",
-        "identifier-email": "Электронная почта",
-        "add-custom-source": "Добавить источник"
+        "identifier-email": "E-mail",
+        "add-custom-source": "Добавить источник",
+        "save-error": "Не удалось сохранить настройки."
     },
     "panel-edit": {
         "avatar-title": "Аватар профиля",
         "avatar-desc": "JPG, PNG или GIF. Макс. {maxSize}МБ."
-    }
+    },
+    "avatar-preview": "Предпросмотр аватара"
 }

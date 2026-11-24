@@ -10,7 +10,7 @@
       <div class="position-relative">
         <img
           src={previewSrc}
-          alt="Avatar Preview"
+          alt={$_('avatar-preview')}
           class="rounded-circle bg-white object-fit-cover shadow-sm"
           style="width: 64px; height: 64px;" />
         
@@ -86,7 +86,7 @@
 </div>
 
 <script>
-  import { _, updateAvatarVersion } from '../../../main.js';
+  import { _, updateAvatarVersion, showErrorToast } from '../../../main.js';
   import { api } from '@panomc/sdk/plugin-api';
 
   export let playerData;
@@ -216,6 +216,7 @@
 
       if (result && result.error) {
         console.error('[pano-plugin-avatar] Panel save failed:', result.error);
+        showErrorToast($_('toasts.save-error'));
         return;
       }
 

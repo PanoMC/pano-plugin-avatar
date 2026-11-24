@@ -55,10 +55,12 @@
     "custom-source-url-hint": "Use {identifier} as placeholder, e.g. https://example.com/avatar/{identifier}",
     "identifier-username": "Username",
     "identifier-email": "Email",
-    "add-custom-source": "Add Custom Source"
+    "add-custom-source": "Add Custom Source",
+    "save-error": "Settings could not be saved."
   },
   "panel-edit": {
     "avatar-title": "Profile Avatar",
     "avatar-desc": "JPG, PNG or GIF. Max {maxSize}MB."
-  }
+  },
+  "avatar-preview": "Avatar preview"
 }

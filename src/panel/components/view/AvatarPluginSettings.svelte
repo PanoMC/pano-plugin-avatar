@@ -260,7 +260,7 @@
       await showSuccessToast('components.toasts.settings-save-success');
     } catch (e) {
       console.error('Failed to save avatar config', e);
-      await showErrorToast('components.toasts.settings-save-error');
+      await showErrorToast($_('settings.save-error'));
     } finally {
       saving = false;
     }

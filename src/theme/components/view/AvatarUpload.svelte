@@ -10,7 +10,7 @@
       <div class="position-relative">
         <img
           src={previewSrc}
-          alt="Avatar Preview"
+          alt={$_('avatar-preview')}
           class="avatar-avatar-upload__image rounded-circle bg-white object-fit-cover shadow-sm"
           style="width: 64px; height: 64px;" />
         
@@ -143,6 +143,7 @@
   import { _ as i18n } from '@panomc/sdk/utils/language';
   import { updateAvatarVersion } from "../../avatar.js";
   import { page } from "@panomc/sdk/svelte";
+  import { showToast } from '@panomc/sdk/toasts';
 
   // plugin translations: `$_('key')` reads `plugins.pano-plugin-avatar.key`
   const _ = derived(i18n, ($_fn) => (key, options) => $_fn(`plugins.pano-plugin-avatar.${key}`, options));
@@ -267,6 +268,7 @@
 
       if (result && result.error) {
         console.error('[pano-plugin-avatar] Save failed:', result.error);
+        showToast($_('toasts.save-error'), {}, undefined, { variant: 'danger' });
         return;
       }
 

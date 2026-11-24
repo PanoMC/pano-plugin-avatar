@@ -10,7 +10,7 @@
   "gravatar": "Gravatar",
   "minotar-info": "{username} kullanıcısının Minecraft skinini kullanır",
   "gravatar-info": "{email} e-postasına bağlı Gravatarı kullanır",
-  "minecraft-username": "Minecraft kullanıcı adı (kendi adını kullanmak için boş bırak)",
+  "minecraft-username": "Minecraft kullanıcı adı (kendi adınızı kullanmak için boş bırakın)",
   "minecraft-username-invalid": "Minecraft kullanıcı adı en fazla 16 harf, rakam veya alt çizgiden oluşur.",
   "buttons": {
     "upload": "Resim Yükle",
@@ -55,10 +55,12 @@
     "custom-source-url-hint": "{identifier} yer tutucusunu kullanın, örn. https://example.com/avatar/{identifier}",
     "identifier-username": "Kullanıcı Adı",
     "identifier-email": "E-posta",
-    "add-custom-source": "Özel Kaynak Ekle"
+    "add-custom-source": "Özel Kaynak Ekle",
+    "save-error": "Ayarlar kaydedilemedi."
   },
   "panel-edit": {
     "avatar-title": "Profil Avatarı",
     "avatar-desc": "JPG, PNG veya GIF. Maks {maxSize}MB."
-  }
+  },
+  "avatar-preview": "Avatar önizlemesi"
 }
